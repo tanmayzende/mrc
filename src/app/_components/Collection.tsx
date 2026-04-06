@@ -1,6 +1,18 @@
-import CityCard from "./CityCard";
+"use client";
 
-const DESTINATIONS = [
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import CityCard from "./CityCard";
+import { detectCountry, getGeoRanking } from "@/lib/geolens";
+
+interface Destination {
+  city: string;
+  country: string;
+  tag: string | null;
+  image: string;
+}
+
+const DESTINATIONS: Destination[] = [
   {
     city: "Santorini",
     country: "Greece",
@@ -51,7 +63,38 @@ const DESTINATIONS = [
   },
 ];
 
+function toSlug(city: string) {
+  return city
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, "")
+    .trim()
+    .replace(/\s+/g, "-");
+}
+
+function applyRanking(destinations: Destination[], ranking: string[]): Destination[] {
+  return [...destinations].sort((a, b) => {
+    const ai = ranking.indexOf(toSlug(a.city));
+    const bi = ranking.indexOf(toSlug(b.city));
+    const aRank = ai === -1 ? Infinity : ai;
+    const bRank = bi === -1 ? Infinity : bi;
+    return aRank - bRank;
+  });
+}
+
 export default function Collection() {
+  const [destinations, setDestinations] = useState<Destination[]>(DESTINATIONS);
+  const [geoLoaded, setGeoLoaded] = useState(false);
+
+  useEffect(() => {
+    detectCountry().then((code) => {
+      if (code) {
+        const ranking = getGeoRanking(code);
+        setDestinations(applyRanking(DESTINATIONS, ranking));
+      }
+      setGeoLoaded(true);
+    });
+  }, []);
+
   return (
     <section className="bg-charcoal py-28 px-16">
       {/* Section header */}
@@ -66,11 +109,15 @@ export default function Collection() {
       </div>
 
       {/* Horizontal scroll rail */}
-      <div className="flex gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-        {DESTINATIONS.map((dest) => (
+      <motion.div
+        className="flex gap-5 overflow-x-auto pb-4 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
+        animate={{ opacity: geoLoaded ? 1 : 0.6 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+      >
+        {destinations.map((dest) => (
           <CityCard key={dest.city} {...dest} />
         ))}
-      </div>
+      </motion.div>
     </section>
   );
 }
