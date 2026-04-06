@@ -3,6 +3,15 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 
+export interface ReferralLinks {
+  viator?: string;
+  getyourguide?: string;
+  booking?: string;
+  klook?: string;
+  seatgeek?: string;
+  direct?: string;
+}
+
 export interface ExperienceCardProps {
   title: string;
   category: string;
@@ -11,8 +20,18 @@ export interface ExperienceCardProps {
   price: string;
   image: string;
   referralUrl: string;
+  referralLinks?: ReferralLinks;
   featured?: boolean;
 }
+
+const PARTNER_LABELS: Record<keyof ReferralLinks, string> = {
+  viator: "Viator",
+  getyourguide: "GetYourGuide",
+  booking: "Booking.com",
+  klook: "Klook",
+  seatgeek: "SeatGeek",
+  direct: "Official Site",
+};
 
 export default function ExperienceCard({
   title,
@@ -22,6 +41,7 @@ export default function ExperienceCard({
   price,
   image,
   referralUrl,
+  referralLinks,
   featured = false,
 }: ExperienceCardProps) {
   const [hovered, setHovered] = useState(false);
@@ -66,16 +86,46 @@ export default function ExperienceCard({
         <p className="text-stone/40 text-xs leading-relaxed tracking-wide mb-8 max-w-lg">
           {description}
         </p>
-        <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => window.open(referralUrl, "_blank")}
-            className="border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
-          >
-            Book This Experience
-          </button>
+        <div className="flex flex-col gap-3">
+          {(() => {
+            const partners = referralLinks
+              ? (Object.keys(referralLinks) as (keyof ReferralLinks)[]).filter(
+                  (k) => referralLinks[k]
+                )
+              : [];
+            const fallbackUrl = referralUrl;
+            if (partners.length > 0) {
+              return (
+                <div className="flex flex-wrap gap-2">
+                  {partners.map((key) => (
+                    <button
+                      key={key}
+                      onClick={() => window.open(referralLinks![key], "_blank")}
+                      className="border border-stone/20 text-stone/50 text-[9px] tracking-[0.25em] uppercase px-4 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
+                    >
+                      {PARTNER_LABELS[key]}
+                    </button>
+                  ))}
+                </div>
+              );
+            }
+            if (fallbackUrl) {
+              return (
+                <div className="flex flex-wrap gap-2">
+                  <button
+                    onClick={() => window.open(fallbackUrl, "_blank")}
+                    className="border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
+                  >
+                    Book This Experience
+                  </button>
+                </div>
+              );
+            }
+            return null;
+          })()}
           <button
             title="Coming Soon"
-            className="text-stone/30 text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:text-stone/50 transition-all duration-500"
+            className="text-stone/30 text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:text-stone/50 transition-all duration-500 self-start"
           >
             AI Generated Trip
           </button>

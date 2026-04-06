@@ -8,6 +8,7 @@ import { supabase } from "@/lib/supabase";
 import CategoryPills from "@/app/_components/CategoryPills";
 import ExperienceCard, {
   type ExperienceCardProps,
+  type ReferralLinks,
 } from "@/app/_components/ExperienceCard";
 
 // ── DB row types ───────────────────────────────────────────────────────────
@@ -27,6 +28,7 @@ interface ExperienceRow {
   price: string | null;
   image: string | null;
   referral_url: string | null;
+  referral_links: ReferralLinks | null;
   featured: boolean;
   sort_order: number;
 }
@@ -67,6 +69,9 @@ function formatName(slug: string) {
 }
 
 function mapExperience(row: ExperienceRow): ExperienceCardProps {
+  const hasLinks =
+    row.referral_links &&
+    Object.values(row.referral_links).some(Boolean);
   return {
     title: row.title,
     category: row.category,
@@ -75,6 +80,7 @@ function mapExperience(row: ExperienceRow): ExperienceCardProps {
     price: row.price ?? "",
     image: row.image ?? "",
     referralUrl: row.referral_url ?? "",
+    referralLinks: hasLinks ? row.referral_links! : undefined,
     featured: row.featured,
   };
 }
@@ -111,10 +117,6 @@ export default function CityPage() {
       setLoading(true);
       setError(false);
 
-      console.log('--- Aurveil debug ---')
-      console.log('city slug:', city)
-      console.log('supabase url:', process.env.NEXT_PUBLIC_SUPABASE_URL)
-
       const [{ data: cityRow, error: cityErr }, { data: expRows, error: expErr }] =
         await Promise.all([
           supabase.from("cities").select("*").eq("slug", city).single(),
@@ -124,11 +126,6 @@ export default function CityPage() {
             .eq("city_slug", city)
             .order("sort_order"),
         ]);
-
-      console.log('cityRow:', cityRow)
-      console.log('cityErr:', cityErr)
-      console.log('expRows:', expRows)
-      console.log('expErr:', expErr)
 
       if (cityErr || !cityRow) {
         setError(true);
