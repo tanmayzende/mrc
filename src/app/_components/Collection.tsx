@@ -77,9 +77,11 @@ export default function Collection() {
 
   useEffect(() => {
     detectLocation().then((geo) => {
+      console.log('detectLocation result:', geo);
       if (geo && geo.latitude && geo.longitude) {
         const currentSlugs = DESTINATIONS.map((d) => toSlug(d.city));
         const rankedSlugs = rankCitiesByLocation(currentSlugs, geo.latitude, geo.longitude);
+        console.log('rankCitiesByLocation result:', rankedSlugs);
 
         const reordered = rankedSlugs
           .map((slug) => DESTINATIONS.find((d) => toSlug(d.city) === slug))

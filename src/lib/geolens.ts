@@ -33,7 +33,10 @@ function getDistance(lat1: number, lng1: number, lat2: number, lng2: number): nu
 
 export async function detectLocation(): Promise<GeoData | null> {
   try {
-    const res = await fetch('/api/geo')
+    const baseUrl = typeof window !== 'undefined'
+      ? window.location.origin
+      : 'http://localhost:3000'
+    const res = await fetch(`${baseUrl}/api/geo`)
     if (!res.ok) return null
     const data = await res.json()
     return data

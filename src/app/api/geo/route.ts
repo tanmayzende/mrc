@@ -10,8 +10,12 @@ export async function GET(request: NextRequest) {
       ? `http://ip-api.com/json/${ip}?fields=countryCode,country,lat,lon`
       : `http://ip-api.com/json/?fields=countryCode,country,lat,lon`
 
+    console.log('Geo API called, forwarded IP:', request.headers.get('x-forwarded-for'))
+
     const res = await fetch(url, { next: { revalidate: 3600 } })
     const data = await res.json()
+
+    console.log('ip-api response:', JSON.stringify(data))
 
     if (data.status === 'fail' || !data.countryCode) {
       return NextResponse.json({
