@@ -2,18 +2,18 @@
 
 const CATEGORIES = [
   "All",
+  "Stays",
   "Gastronomy & Dining",
+  "Concierge",
+  "Wellness Retreats",
+  "Adventure",
   "Nightlife",
   "Sports",
   "Music & Festivals",
-  "Fashion",
-  "Wellness Retreats",
-  "Adventure",
-  "Wildlife & Nature",
   "Maritime Escapes",
+  "Wildlife & Nature",
+  "Fashion",
   "Culture & Arts",
-  "Concierge",
-  "Stays",
   "Pilgrimage",
 ];
 
