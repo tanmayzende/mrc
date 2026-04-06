@@ -22,6 +22,9 @@ export interface ExperienceCardProps {
   referralUrl: string;
   referralLinks?: ReferralLinks;
   featured?: boolean;
+  experienceId?: string;
+  isSaved?: boolean;
+  onSaveToggle?: (id: string, saved: boolean) => void;
 }
 
 const PARTNER_LABELS: Record<keyof ReferralLinks, string> = {
@@ -43,8 +46,20 @@ export default function ExperienceCard({
   referralUrl,
   referralLinks,
   featured = false,
+  experienceId,
+  isSaved = false,
+  onSaveToggle,
 }: ExperienceCardProps) {
   const [hovered, setHovered] = useState(false);
+
+  console.log("ExperienceCard experienceId:", experienceId);
+
+  const handleSave = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (onSaveToggle && experienceId) {
+      onSaveToggle(experienceId, isSaved);
+    }
+  };
 
   return (
     <motion.article
@@ -70,6 +85,27 @@ export default function ExperienceCard({
             : "from-charcoal/95 via-charcoal/30"
         }`}
       />
+
+      {/* Save button — rendered after image/gradient so it sits above them in stacking order */}
+      <button
+        onClick={handleSave}
+        aria-label={isSaved ? "Unsave experience" : "Save experience"}
+        className={`absolute top-3 right-3 z-10 p-1.5 bg-charcoal/80 border transition-all duration-500 ${
+          isSaved
+            ? "border-gold/60 text-gold bg-gold/10"
+            : "border-stone/50 text-stone/70 hover:border-gold/50 hover:text-gold"
+        }`}
+      >
+        {isSaved ? (
+          <svg width="12" height="16" viewBox="0 0 12 16" fill="currentColor" stroke="currentColor" strokeWidth="1.5">
+            <path d="M1 1h10v14l-5-3.5L1 15V1z"/>
+          </svg>
+        ) : (
+          <svg width="12" height="16" viewBox="0 0 12 16" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path d="M1 1h10v14l-5-3.5L1 15V1z"/>
+          </svg>
+        )}
+      </button>
 
       {/* Content */}
       <div className="absolute bottom-0 left-0 right-0 px-8 py-8">

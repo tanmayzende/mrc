@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CityCard from "./CityCard";
-import { detectCountry, getGeoRanking } from "@/lib/geolens";
+import { detectLocation, rankCitiesByLocation } from "@/lib/geolens";
 
 interface Destination {
   city: string;
@@ -71,25 +71,22 @@ function toSlug(city: string) {
     .replace(/\s+/g, "-");
 }
 
-function applyRanking(destinations: Destination[], ranking: string[]): Destination[] {
-  return [...destinations].sort((a, b) => {
-    const ai = ranking.indexOf(toSlug(a.city));
-    const bi = ranking.indexOf(toSlug(b.city));
-    const aRank = ai === -1 ? Infinity : ai;
-    const bRank = bi === -1 ? Infinity : bi;
-    return aRank - bRank;
-  });
-}
-
 export default function Collection() {
   const [destinations, setDestinations] = useState<Destination[]>(DESTINATIONS);
   const [geoLoaded, setGeoLoaded] = useState(false);
 
   useEffect(() => {
-    detectCountry().then((code) => {
-      if (code) {
-        const ranking = getGeoRanking(code);
-        setDestinations(applyRanking(DESTINATIONS, ranking));
+    detectLocation().then((geo) => {
+      if (geo && geo.latitude && geo.longitude) {
+        const currentSlugs = DESTINATIONS.map((d) => toSlug(d.city));
+        const rankedSlugs = rankCitiesByLocation(currentSlugs, geo.latitude, geo.longitude);
+
+        const reordered = rankedSlugs
+          .map((slug) => DESTINATIONS.find((d) => toSlug(d.city) === slug))
+          .filter(Boolean) as Destination[];
+
+        const unranked = DESTINATIONS.filter((d) => !reordered.includes(d));
+        setDestinations([...reordered, ...unranked]);
       }
       setGeoLoaded(true);
     });

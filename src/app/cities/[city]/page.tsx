@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
@@ -21,6 +21,7 @@ interface CityRow {
 }
 
 interface ExperienceRow {
+  id: string;
   title: string;
   category: string;
   location: string;
@@ -68,11 +69,12 @@ function formatName(slug: string) {
     .join(" ");
 }
 
-function mapExperience(row: ExperienceRow): ExperienceCardProps {
+function mapExperience(row: ExperienceRow): ExperienceCardProps & { id: string } {
   const hasLinks =
     row.referral_links &&
     Object.values(row.referral_links).some(Boolean);
   return {
+    id: row.id,
     title: row.title,
     category: row.category,
     location: row.location,
@@ -101,11 +103,15 @@ const cardVariants = {
 };
 
 // ── Page ───────────────────────────────────────────────────────────────────
+type MappedExperience = ExperienceCardProps & { id: string };
+
 export default function CityPage() {
   const { city } = useParams<{ city: string }>();
+  const router = useRouter();
 
   const [cityData, setCityData] = useState<CityRow | null>(null);
-  const [experiences, setExperiences] = useState<ExperienceCardProps[]>([]);
+  const [experiences, setExperiences] = useState<MappedExperience[]>([]);
+  const [savedIds, setSavedIds] = useState<Set<string>>(new Set());
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -117,15 +123,15 @@ export default function CityPage() {
       setLoading(true);
       setError(false);
 
-      const [{ data: cityRow, error: cityErr }, { data: expRows, error: expErr }] =
-        await Promise.all([
-          supabase.from("cities").select("*").eq("slug", city).single(),
-          supabase
-            .from("experiences")
-            .select("*")
-            .eq("city_slug", city)
-            .order("sort_order"),
-        ]);
+      const [
+        { data: cityRow, error: cityErr },
+        { data: expRows },
+        { data: { user } },
+      ] = await Promise.all([
+        supabase.from("cities").select("*").eq("slug", city).single(),
+        supabase.from("experiences").select("*").eq("city_slug", city).order("sort_order"),
+        supabase.auth.getUser(),
+      ]);
 
       if (cityErr || !cityRow) {
         setError(true);
@@ -135,11 +141,47 @@ export default function CityPage() {
 
       setCityData(cityRow as CityRow);
       setExperiences((expRows ?? []).map((r) => mapExperience(r as ExperienceRow)));
+
+      if (user) {
+        const { data: saved } = await supabase
+          .from("saved_experiences")
+          .select("experience_id")
+          .eq("user_id", user.id);
+        setSavedIds(new Set(saved?.map((s) => s.experience_id) ?? []));
+      }
+
       setLoading(false);
     };
 
     fetchData();
   }, [city]);
+
+  async function handleSaveToggle(experienceId: string, currentlySaved: boolean) {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      router.push("/auth");
+      return;
+    }
+    if (currentlySaved) {
+      await supabase
+        .from("saved_experiences")
+        .delete()
+        .eq("user_id", user.id)
+        .eq("experience_id", experienceId);
+      setSavedIds((prev) => {
+        const next = new Set(prev);
+        next.delete(experienceId);
+        return next;
+      });
+    } else {
+      await supabase.from("saved_experiences").insert({
+        user_id: user.id,
+        experience_id: experienceId,
+        city_slug: city,
+      });
+      setSavedIds((prev) => new Set([...prev, experienceId]));
+    }
+  }
 
   // ── Loading state ──────────────────────────────────────────────────────
   if (loading) {
@@ -176,7 +218,7 @@ export default function CityPage() {
     cityData.hero_image ??
     "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=95";
 
-  const filtered =
+  const filtered: MappedExperience[] =
     activeCategory === "All"
       ? experiences
       : experiences.filter((e) => e.category === activeCategory);
@@ -223,7 +265,7 @@ export default function CityPage() {
 
       {/* ── Sticky Category Pills ──────────────────────────────────── */}
       <motion.div
-        className="sticky top-0 z-50 bg-charcoal/95 backdrop-blur-sm py-6 px-16 border-b border-stone/10"
+        className="sticky top-0 z-50 bg-charcoal py-6 px-16 border-b border-stone/10"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
@@ -252,7 +294,12 @@ export default function CityPage() {
             {rows.map((row, rowIndex) =>
               row.type === "featured" ? (
                 <motion.div key={`row-${rowIndex}`} variants={cardVariants}>
-                  <ExperienceCard {...row.item} />
+                  <ExperienceCard
+                    {...row.item}
+                    experienceId={(row.item as MappedExperience).id}
+                    isSaved={savedIds.has((row.item as MappedExperience).id)}
+                    onSaveToggle={handleSaveToggle}
+                  />
                 </motion.div>
               ) : (
                 <div key={`row-${rowIndex}`} className="flex gap-5">
@@ -270,7 +317,12 @@ export default function CityPage() {
                             : "33.333%",
                       }}
                     >
-                      <ExperienceCard {...exp} />
+                      <ExperienceCard
+                        {...exp}
+                        experienceId={(exp as MappedExperience).id}
+                        isSaved={savedIds.has((exp as MappedExperience).id)}
+                        onSaveToggle={handleSaveToggle}
+                      />
                     </motion.div>
                   ))}
                 </div>
