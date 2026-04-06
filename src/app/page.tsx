@@ -1,5 +1,6 @@
 import Nav from "./_components/Nav";
 import Collection from "./_components/Collection";
+import HomeSearch from "./_components/HomeSearch";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=95";
@@ -52,6 +53,8 @@ export default function Home() {
               Create Account
             </a>
           </div>
+
+          <HomeSearch />
         </div>
 
         {/* Scroll indicator */}
