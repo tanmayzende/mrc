@@ -303,11 +303,11 @@ export default function CityPage() {
                 </motion.div>
               ) : (
                 <div key={`row-${rowIndex}`} className="w-full flex flex-col md:flex-row gap-0 md:gap-5">
-                  {row.items.map((exp, expIndex) => (
+                  {row.items.map((exp) => (
                     <motion.div
                       key={exp.title}
                       variants={cardVariants}
-                      className={`w-full md:flex-1 md:min-w-0 ${expIndex < row.items.length - 1 ? "border-b border-stone/10 md:border-b-0" : ""}`}
+                      className="w-full md:flex-1 md:min-w-0"
                     >
                       <ExperienceCard
                         {...exp}

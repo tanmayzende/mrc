@@ -130,12 +130,12 @@ export default function ExperienceCard({
             const fallbackUrl = referralUrl;
             if (partners.length > 0) {
               return (
-                <div className="flex flex-col md:flex-row flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-1.5">
                   {partners.map((key) => (
                     <button
                       key={key}
                       onClick={() => window.open(referralLinks![key], "_blank")}
-                      className="w-full md:w-auto border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-3 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
+                      className="border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-2 py-1.5 hover:border-gold/50 hover:text-gold transition-all duration-500"
                     >
                       {PARTNER_LABELS[key]}
                     </button>
@@ -145,10 +145,10 @@ export default function ExperienceCard({
             }
             if (fallbackUrl) {
               return (
-                <div className="flex flex-col md:flex-row flex-wrap gap-2">
+                <div className="flex flex-row flex-wrap gap-1.5">
                   <button
                     onClick={() => window.open(fallbackUrl, "_blank")}
-                    className="w-full md:w-auto border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
+                    className="border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
                   >
                     Book This Experience
                   </button>
