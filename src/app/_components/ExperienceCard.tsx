@@ -77,10 +77,10 @@ export default function ExperienceCard({
 
       {/* Gradient */}
       <div
-        className={`absolute inset-0 bg-gradient-to-t to-transparent ${
+        className={`absolute inset-0 bg-gradient-to-t ${
           featured
-            ? "from-charcoal/98 via-charcoal/60"
-            : "from-charcoal/95 via-charcoal/30"
+            ? "from-black/95 via-black/60 to-black/20"
+            : "from-black/95 via-black/50 to-transparent"
         }`}
       />
 
@@ -106,17 +106,17 @@ export default function ExperienceCard({
       </button>
 
       {/* Content */}
-      <div className={`absolute bottom-0 left-0 right-0 py-8 ${featured ? "px-4 md:px-8" : "px-4 md:px-6"}`}>
-        <p className="text-gold/60 text-[9px] tracking-[0.4em] uppercase mb-3">
+      <div className={`absolute bottom-0 left-0 right-0 pt-24 pb-8 ${featured ? "px-4 md:px-8" : "px-4 md:px-6"}`}>
+        <p className="text-gold/80 text-[9px] tracking-[0.4em] uppercase mb-3">
           {category}
         </p>
-        <p className="font-serif text-xl md:text-2xl font-light text-stone/90 tracking-wide mb-2">
+        <p className="font-serif text-xl md:text-2xl font-light text-white tracking-wide mb-2 line-clamp-2">
           {title}
         </p>
-        <p className="text-stone/40 text-[10px] tracking-[0.25em] uppercase mb-4">
+        <p className="text-white/60 text-[10px] tracking-[0.25em] uppercase mb-4">
           {location}
         </p>
-        <p className="text-stone/50 text-xs tracking-[0.2em] mb-6">{price}</p>
+        <p className="text-white/70 text-xs tracking-[0.2em] mb-6">{price}</p>
         <p className="hidden md:block text-stone/40 text-xs leading-relaxed tracking-wide mb-8 max-w-lg">
           {description}
         </p>

@@ -274,7 +274,7 @@ export default function CityPage() {
       </motion.div>
 
       {/* ── Experience Catalog ─────────────────────────────────────── */}
-      <section className="bg-charcoal py-4 px-0 md:px-16">
+      <section className="bg-charcoal py-4 md:px-16">
         <p className="text-stone/30 text-[10px] tracking-[0.5em] uppercase mb-8 px-4 md:px-0">
           CURATED EXPERIENCES
         </p>
@@ -293,7 +293,7 @@ export default function CityPage() {
           >
             {rows.map((row, rowIndex) =>
               row.type === "featured" ? (
-                <motion.div key={`row-${rowIndex}`} variants={cardVariants}>
+                <motion.div key={`row-${rowIndex}`} variants={cardVariants} className="w-full">
                   <ExperienceCard
                     {...row.item}
                     experienceId={(row.item as MappedExperience).id}
@@ -302,7 +302,7 @@ export default function CityPage() {
                   />
                 </motion.div>
               ) : (
-                <div key={`row-${rowIndex}`} className="flex flex-col md:flex-row gap-0 md:gap-5">
+                <div key={`row-${rowIndex}`} className="w-full flex flex-col md:flex-row gap-0 md:gap-5">
                   {row.items.map((exp, expIndex) => (
                     <motion.div
                       key={exp.title}
