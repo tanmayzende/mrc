@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { supabase } from "@/lib/supabase";
+import { trackEvent } from "@/lib/tracking";
 import CategoryPills from "@/app/_components/CategoryPills";
 import ExperienceCard, {
   type ExperienceCardProps,
@@ -115,6 +116,17 @@ export default function CityPage() {
   const [activeCategory, setActiveCategory] = useState("All");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const mountTimeRef = useRef<number>(Date.now());
+
+  useEffect(() => {
+    if (!city) return;
+    mountTimeRef.current = Date.now();
+    trackEvent({ event_type: 'city_view', city_slug: city });
+    return () => {
+      const elapsed = Math.round((Date.now() - mountTimeRef.current) / 1000);
+      trackEvent({ event_type: 'city_exit', city_slug: city, duration_seconds: elapsed });
+    };
+  }, [city]);
 
   useEffect(() => {
     if (!city) return;
@@ -270,7 +282,13 @@ export default function CityPage() {
         animate={{ opacity: 1 }}
         transition={{ duration: 0.9, delay: 0.5, ease: "easeOut" }}
       >
-        <CategoryPills active={activeCategory} onSelect={setActiveCategory} />
+        <CategoryPills
+          active={activeCategory}
+          onSelect={(cat) => {
+            setActiveCategory(cat);
+            if (cat !== 'All') trackEvent({ event_type: 'category_click', city_slug: city, category: cat });
+          }}
+        />
       </motion.div>
 
       {/* ── Experience Catalog ─────────────────────────────────────── */}

@@ -1,6 +1,7 @@
 import Nav from "./_components/Nav";
 import Collection from "./_components/Collection";
 import HomeSearch from "./_components/HomeSearch";
+import PreferenceGate from "./_components/PreferenceGate";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&q=95";
@@ -8,6 +9,7 @@ const HERO_IMAGE =
 export default function Home() {
   return (
     <>
+      <PreferenceGate />
       {/* ── Hero ─────────────────────────────────────────────────── */}
       <section className="relative h-screen w-full overflow-hidden">
         <div

@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import CityCard from "./CityCard";
-import { detectLocation, rankCitiesByLocation } from "@/lib/geolens";
+import { detectLocation, contextLensRank } from "@/lib/geolens";
+import { getUserInterests } from "@/lib/tracking";
+import { supabase } from "@/lib/supabase";
 
 interface Destination {
   city: string;
@@ -76,20 +78,51 @@ export default function Collection() {
   const [geoLoaded, setGeoLoaded] = useState(false);
 
   useEffect(() => {
-    detectLocation().then((geo) => {
-      if (geo && geo.latitude && geo.longitude) {
-        const currentSlugs = DESTINATIONS.map((d) => toSlug(d.city));
-        const rankedSlugs = rankCitiesByLocation(currentSlugs, geo.latitude, geo.longitude);
+    async function initContextLens() {
+      try {
+        const geo = await detectLocation();
+        const { data: { user } } = await supabase.auth.getUser();
+
+        let preferences = undefined;
+        let behavior = undefined;
+
+        if (user) {
+          const { data: prefs } = await supabase
+            .from('user_preferences')
+            .select('*')
+            .eq('user_id', user.id)
+            .single();
+
+          if (prefs) {
+            preferences = {
+              travel_style: prefs.travel_style,
+              travel_frequency: prefs.travel_frequency,
+            };
+          }
+
+          behavior = await getUserInterests(user.id);
+        }
+
+        const lat = geo?.latitude ?? 37.0902;
+        const lng = geo?.longitude ?? -95.7129;
+
+        const currentSlugs = DESTINATIONS.map(d => toSlug(d.city));
+        const rankedSlugs = contextLensRank(currentSlugs, lat, lng, preferences, behavior);
 
         const reordered = rankedSlugs
-          .map((slug) => DESTINATIONS.find((d) => toSlug(d.city) === slug))
-          .filter(Boolean) as Destination[];
+          .map(slug => DESTINATIONS.find(d => toSlug(d.city) === slug))
+          .filter(Boolean) as typeof DESTINATIONS;
 
-        const unranked = DESTINATIONS.filter((d) => !reordered.includes(d));
+        const unranked = DESTINATIONS.filter(d => !reordered.includes(d));
         setDestinations([...reordered, ...unranked]);
+      } catch {
+        // Keep default order on any error
+      } finally {
+        setGeoLoaded(true);
       }
-      setGeoLoaded(true);
-    });
+    }
+
+    initContextLens();
   }, []);
 
   return (

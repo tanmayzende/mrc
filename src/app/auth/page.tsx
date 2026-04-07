@@ -41,6 +41,7 @@ export default function AuthPage() {
         setError(error.message);
       } else {
         setSuccess("Account created. You are now signed in.");
+        localStorage.setItem('aurveil_show_preferences', '1');
         setTimeout(() => router.push("/"), 800);
       }
     } else {

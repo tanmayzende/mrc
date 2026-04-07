@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { motion } from "framer-motion";
+import { trackEvent } from "@/lib/tracking";
 
 export interface ReferralLinks {
   viator?: string;
@@ -134,7 +135,10 @@ export default function ExperienceCard({
                   {partners.map((key) => (
                     <button
                       key={key}
-                      onClick={() => window.open(referralLinks![key], "_blank")}
+                      onClick={() => {
+                        trackEvent({ event_type: 'experience_click', category, city_slug: location });
+                        window.open(referralLinks![key], "_blank");
+                      }}
                       className="border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-2 py-1.5 hover:border-gold/50 hover:text-gold transition-all duration-500"
                     >
                       {PARTNER_LABELS[key]}
@@ -147,7 +151,10 @@ export default function ExperienceCard({
               return (
                 <div className="flex flex-row flex-wrap gap-1.5">
                   <button
-                    onClick={() => window.open(fallbackUrl, "_blank")}
+                    onClick={() => {
+                      trackEvent({ event_type: 'experience_click', category, city_slug: location });
+                      window.open(fallbackUrl, "_blank");
+                    }}
                     className="border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
                   >
                     Book This Experience
