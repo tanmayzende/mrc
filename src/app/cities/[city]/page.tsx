@@ -274,13 +274,13 @@ export default function CityPage() {
       </motion.div>
 
       {/* ── Experience Catalog ─────────────────────────────────────── */}
-      <section className="bg-charcoal py-4 px-16">
-        <p className="text-stone/30 text-[10px] tracking-[0.5em] uppercase mb-8">
+      <section className="bg-charcoal py-4 px-0 md:px-16">
+        <p className="text-stone/30 text-[10px] tracking-[0.5em] uppercase mb-8 px-4 md:px-0">
           CURATED EXPERIENCES
         </p>
 
         {filtered.length === 0 ? (
-          <p className="text-stone/30 text-xs tracking-[0.3em] uppercase">
+          <p className="text-stone/30 text-xs tracking-[0.3em] uppercase px-4 md:px-0">
             No experiences found for this category.
           </p>
         ) : (
@@ -302,12 +302,12 @@ export default function CityPage() {
                   />
                 </motion.div>
               ) : (
-                <div key={`row-${rowIndex}`} className="flex flex-col md:flex-row gap-5">
-                  {row.items.map((exp) => (
+                <div key={`row-${rowIndex}`} className="flex flex-col md:flex-row gap-0 md:gap-5">
+                  {row.items.map((exp, expIndex) => (
                     <motion.div
                       key={exp.title}
                       variants={cardVariants}
-                      className="w-full md:flex-1 md:min-w-0"
+                      className={`w-full md:flex-1 md:min-w-0 ${expIndex < row.items.length - 1 ? "border-b border-stone/10 md:border-b-0" : ""}`}
                     >
                       <ExperienceCard
                         {...exp}

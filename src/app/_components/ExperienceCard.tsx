@@ -106,18 +106,18 @@ export default function ExperienceCard({
       </button>
 
       {/* Content */}
-      <div className="absolute bottom-0 left-0 right-0 px-8 py-8">
+      <div className={`absolute bottom-0 left-0 right-0 py-8 ${featured ? "px-4 md:px-8" : "px-4 md:px-6"}`}>
         <p className="text-gold/60 text-[9px] tracking-[0.4em] uppercase mb-3">
           {category}
         </p>
-        <p className="font-serif text-2xl font-light text-stone/90 tracking-wide mb-2">
+        <p className="font-serif text-xl md:text-2xl font-light text-stone/90 tracking-wide mb-2">
           {title}
         </p>
         <p className="text-stone/40 text-[10px] tracking-[0.25em] uppercase mb-4">
           {location}
         </p>
         <p className="text-stone/50 text-xs tracking-[0.2em] mb-6">{price}</p>
-        <p className="text-stone/40 text-xs leading-relaxed tracking-wide mb-8 max-w-lg">
+        <p className="hidden md:block text-stone/40 text-xs leading-relaxed tracking-wide mb-8 max-w-lg">
           {description}
         </p>
         <div className="flex flex-col gap-3">
@@ -130,12 +130,12 @@ export default function ExperienceCard({
             const fallbackUrl = referralUrl;
             if (partners.length > 0) {
               return (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col md:flex-row flex-wrap gap-2">
                   {partners.map((key) => (
                     <button
                       key={key}
                       onClick={() => window.open(referralLinks![key], "_blank")}
-                      className="border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-3 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
+                      className="w-full md:w-auto border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-3 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
                     >
                       {PARTNER_LABELS[key]}
                     </button>
@@ -145,10 +145,10 @@ export default function ExperienceCard({
             }
             if (fallbackUrl) {
               return (
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-col md:flex-row flex-wrap gap-2">
                   <button
                     onClick={() => window.open(fallbackUrl, "_blank")}
-                    className="border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
+                    className="w-full md:w-auto border border-gold/50 text-gold text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:bg-gold hover:text-charcoal transition-all duration-500"
                   >
                     Book This Experience
                   </button>

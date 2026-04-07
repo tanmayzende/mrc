@@ -32,7 +32,7 @@ export default function CityCard({ city, country, image, tag }: CityCardProps) {
 
   return (
     <motion.article
-      className="relative shrink-0 w-80 h-[500px] overflow-hidden cursor-pointer select-none"
+      className="relative shrink-0 w-64 md:w-80 h-[500px] overflow-hidden cursor-pointer select-none"
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
       onClick={handleClick}

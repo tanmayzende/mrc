@@ -93,9 +93,9 @@ export default function Collection() {
   }, []);
 
   return (
-    <section className="bg-charcoal py-28 px-16">
+    <section className="bg-charcoal py-28 px-4 md:px-16">
       {/* Section header */}
-      <div className="mb-16 pl-4">
+      <div className="mb-16 pl-0 md:pl-4">
         <p className="text-stone/30 text-[10px] tracking-[0.5em] uppercase mb-6">
           CURATED DESTINATIONS
         </p>
