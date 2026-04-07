@@ -302,20 +302,12 @@ export default function CityPage() {
                   />
                 </motion.div>
               ) : (
-                <div key={`row-${rowIndex}`} className="flex gap-5">
+                <div key={`row-${rowIndex}`} className="flex flex-col md:flex-row gap-5">
                   {row.items.map((exp) => (
                     <motion.div
                       key={exp.title}
                       variants={cardVariants}
-                      className="flex-1 min-w-0"
-                      style={{
-                        maxWidth:
-                          row.items.length === 1
-                            ? "100%"
-                            : row.items.length === 2
-                            ? "50%"
-                            : "33.333%",
-                      }}
+                      className="w-full md:flex-1 md:min-w-0"
                     >
                       <ExperienceCard
                         {...exp}

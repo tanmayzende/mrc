@@ -52,8 +52,6 @@ export default function ExperienceCard({
 }: ExperienceCardProps) {
   const [hovered, setHovered] = useState(false);
 
-  console.log("ExperienceCard experienceId:", experienceId);
-
   const handleSave = (e: React.MouseEvent) => {
     e.stopPropagation();
     if (onSaveToggle && experienceId) {
@@ -137,7 +135,7 @@ export default function ExperienceCard({
                     <button
                       key={key}
                       onClick={() => window.open(referralLinks![key], "_blank")}
-                      className="border border-stone/20 text-stone/50 text-[9px] tracking-[0.25em] uppercase px-4 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
+                      className="border border-stone/20 text-stone/50 text-[8px] tracking-[0.25em] uppercase px-3 py-2 hover:border-gold/50 hover:text-gold transition-all duration-500"
                     >
                       {PARTNER_LABELS[key]}
                     </button>
@@ -161,7 +159,7 @@ export default function ExperienceCard({
           })()}
           <button
             title="Coming Soon"
-            className="text-stone/30 text-[10px] tracking-[0.25em] uppercase px-6 py-3 hover:text-stone/50 transition-all duration-500 self-start"
+            className="text-stone/30 text-[10px] tracking-[0.15em] uppercase px-6 py-3 hover:text-stone/50 transition-all duration-500 self-start whitespace-nowrap"
           >
             AI Generated Trip
           </button>
