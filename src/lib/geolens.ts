@@ -180,6 +180,8 @@ export function contextLensRank(
       (timeScore * 0.05) +
       (frequencyScore * 0.10)
 
+    console.log(`${slug}: proximity=${proximityScore.toFixed(2)} style=${styleScore.toFixed(2)} behavior=${behaviorScore.toFixed(2)} season=${seasonScore.toFixed(2)} time=${timeScore.toFixed(2)} freq=${frequencyScore.toFixed(2)} TOTAL=${finalScore.toFixed(2)}`)
+
     return { slug, score: finalScore }
   })
 

@@ -83,8 +83,8 @@ export default function Collection() {
         const geo = await detectLocation();
         const { data: { user } } = await supabase.auth.getUser();
 
-        let preferences = undefined;
-        let behavior = undefined;
+        let preferences: { travel_style?: string[]; travel_frequency?: string } | undefined = undefined;
+        let behavior: { topCategories?: string[]; topVibes?: string[] } | undefined = undefined;
 
         if (user) {
           const { data: prefs } = await supabase
