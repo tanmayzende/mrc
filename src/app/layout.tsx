@@ -19,7 +19,7 @@ const cormorant = Cormorant_Garamond({
 });
 
 export const metadata: Metadata = {
-  title: "Madriche — Luxury Travel",
+  title: "madriche",
   description: "Exclusive luxury travel for discerning individuals.",
 };
 
