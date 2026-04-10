@@ -6,6 +6,7 @@ import Nav from "./_components/Nav";
 import HeroVideo from "./_components/HeroVideo";
 import HeroSearch from "./_components/HeroSearch";
 import PreferenceGate from "./_components/PreferenceGate";
+import DriftingCards from "./_components/DriftingCards";
 
 function Reveal({ children, delay = 0 }: { children: React.ReactNode; delay?: number }) {
   const ref = useRef(null);
@@ -125,6 +126,9 @@ export default function Home() {
           </div>
         </section>
       </Reveal>
+
+      {/* ── DRIFTING CARDS ── */}
+      <DriftingCards />
 
       {/* ── CATEGORIES ── */}
       <section style={{ background: "#0A0A0A" }} className="border-b border-white/5 py-5 px-6 overflow-x-auto">
