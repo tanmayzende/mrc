@@ -2,6 +2,14 @@
 
 import { useRef, useEffect } from "react";
 
+// CSS animation injected once
+const STYLE = `
+@keyframes drift1 { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@keyframes drift2 { from { transform: translateX(-50%); } to { transform: translateX(0%); } }
+.drift-row-1 { animation: drift1 40s linear infinite; }
+.drift-row-2 { animation: drift2 55s linear infinite; }
+`;
+
 const CARDS = [
   {
     image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=500&q=80",
@@ -53,40 +61,12 @@ const CARDS = [
   },
 ];
 
-// Duplicate for seamless loop
-const ALL_CARDS = [...CARDS, ...CARDS];
+// Duplicate cards for seamless infinite loop
+const ALL_CARDS = [...CARDS, ...CARDS, ...CARDS];
 
 export default function DriftingCards() {
   const row1Ref = useRef<HTMLDivElement>(null);
   const row2Ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    let frame: number;
-    let pos1 = 0;
-    let pos2 = -400; // offset second row
-
-    const SPEED1 = 0.4;
-    const SPEED2 = 0.28;
-
-    const cardW = 280 + 16; // card width + gap
-    const totalW = cardW * CARDS.length;
-
-    function tick() {
-      pos1 -= SPEED1;
-      pos2 -= SPEED2;
-
-      if (Math.abs(pos1) >= totalW) pos1 = 0;
-      if (Math.abs(pos2) >= totalW) pos2 = 0;
-
-      if (row1Ref.current) row1Ref.current.style.transform = `translateX(${pos1}px)`;
-      if (row2Ref.current) row2Ref.current.style.transform = `translateX(${pos2}px)`;
-
-      frame = requestAnimationFrame(tick);
-    }
-
-    frame = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(frame);
-  }, []);
 
   const Card = ({ card }: { card: typeof CARDS[0] }) => (
     <div
@@ -116,10 +96,9 @@ export default function DriftingCards() {
   );
 
   return (
-    <div
-      className="py-20 overflow-hidden"
-      style={{ background: "#050505" }}
-    >
+    <div className="py-20 overflow-hidden" style={{ background: "#050505" }}>
+      <style>{STYLE}</style>
+
       {/* Label */}
       <div className="px-8 mb-12 text-center">
         <p className="text-white/15 text-[9px] tracking-[0.3em] uppercase mb-4">What awaits you</p>
@@ -132,15 +111,15 @@ export default function DriftingCards() {
       </div>
 
       {/* Row 1 — drifts left */}
-      <div className="relative mb-4" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
-        <div ref={row1Ref} className="flex gap-4" style={{ width: "max-content" }}>
+      <div className="relative mb-4 overflow-hidden" style={{ maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)" }}>
+        <div ref={row1Ref} className="drift-row-1 flex gap-4" style={{ width: "max-content" }}>
           {ALL_CARDS.map((card, i) => <Card key={i} card={card} />)}
         </div>
       </div>
 
-      {/* Row 2 — drifts left, slower and offset */}
-      <div className="relative" style={{ maskImage: "linear-gradient(to right, transparent, black 8%, black 92%, transparent)" }}>
-        <div ref={row2Ref} className="flex gap-4" style={{ width: "max-content" }}>
+      {/* Row 2 — drifts right */}
+      <div className="relative overflow-hidden" style={{ maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)" }}>
+        <div ref={row2Ref} className="drift-row-2 flex gap-4" style={{ width: "max-content" }}>
           {[...ALL_CARDS].reverse().map((card, i) => <Card key={i} card={card} />)}
         </div>
       </div>
