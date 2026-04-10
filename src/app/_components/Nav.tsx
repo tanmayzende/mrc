@@ -42,7 +42,7 @@ export default function Nav() {
       <nav className="flex items-center justify-between px-10 py-8">
         {/* Wordmark */}
         <span className="font-serif text-stone/90 text-xs tracking-[0.5em] uppercase">
-          AURVEIL
+          MADRICHE
         </span>
 
         {/* Nav items */}

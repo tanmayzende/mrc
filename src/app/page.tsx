@@ -71,7 +71,7 @@ export default function Home() {
       {/* ── Philosophy Strip ─────────────────────────────────────── */}
       <section className="bg-charcoal py-32 px-6">
         <p className="text-stone/30 text-[10px] tracking-[0.5em] uppercase text-center mb-16">
-          THE AURVEIL PHILOSOPHY
+          THE MADRICHE PHILOSOPHY
         </p>
         <blockquote className="font-serif text-4xl lg:text-6xl font-light text-stone/80 tracking-[0.04em] max-w-4xl mx-auto text-center leading-relaxed">
           &ldquo;Not every destination is for everyone.
@@ -80,7 +80,7 @@ export default function Home() {
         </blockquote>
         <hr className="w-8 border-t border-gold/40 mx-auto mt-10" />
         <p className="text-stone/35 text-xs tracking-[0.2em] uppercase text-center max-w-lg mx-auto mt-8">
-          Aurveil curates the world&apos;s most extraordinary experiences for
+          Madriche curates the world&apos;s most extraordinary experiences for
           those who understand that true luxury is access, not price.
         </p>
       </section>

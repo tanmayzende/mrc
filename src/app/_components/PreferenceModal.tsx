@@ -61,7 +61,7 @@ export default function PreferenceModal({ onDismiss }: PreferenceModalProps) {
       <div className="w-full max-w-lg bg-charcoal border border-stone/15 p-12">
         {/* Logo */}
         <p className="font-serif text-stone/60 text-xs tracking-[0.5em] uppercase text-center mb-8">
-          AURVEIL
+          MADRICHE
         </p>
 
         {/* Headline */}

@@ -116,7 +116,7 @@ export default function AccountPage() {
           ← Collection
         </Link>
         <span className="font-serif text-stone/80 text-xs tracking-[0.5em] uppercase">
-          AURVEIL
+          MADRICHE
         </span>
       </div>
 

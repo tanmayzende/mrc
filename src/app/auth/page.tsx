@@ -73,7 +73,7 @@ export default function AuthPage() {
         <div className="w-full max-w-md border border-stone/10 px-10 py-12">
           {/* Logo */}
           <p className="font-serif text-stone/80 text-xs tracking-[0.5em] uppercase text-center mb-12">
-            AURVEIL
+            MADRICHE
           </p>
 
           {/* Mode toggle */}
