@@ -128,7 +128,7 @@ export default function Home() {
       </Reveal>
 
       {/* ── DRIFTING CARDS ── */}
-      <DriftingCards />
+      <div style={{background:"#050505", padding:"4px 0"}}><DriftingCards /></div>
 
       {/* ── CATEGORIES ── */}
       <section style={{ background: "#0A0A0A" }} className="border-b border-white/5 py-5 px-6 overflow-x-auto">
