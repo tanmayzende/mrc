@@ -16,3 +16,18 @@ body {
   background-color: #1A1A1B;
   color: #E5E4E2;
 }
+
+@keyframes drift-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-33.333%); }
+}
+@keyframes drift-right {
+  0% { transform: translateX(-33.333%); }
+  100% { transform: translateX(0); }
+}
+.drift-left {
+  animation: drift-left 45s linear infinite;
+}
+.drift-right {
+  animation: drift-right 60s linear infinite;
+}

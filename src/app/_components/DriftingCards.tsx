@@ -48,13 +48,6 @@ function ExperienceCard({ card }: { card: typeof CARDS[0] }) {
 export default function DriftingCards() {
   return (
     <div style={{ background: "#050505", padding: "80px 0", overflow: "hidden" }}>
-      <style>{`
-        @keyframes drift-left { 0% { transform: translateX(0); } 100% { transform: translateX(-33.333%); } }
-        @keyframes drift-right { 0% { transform: translateX(-33.333%); } 100% { transform: translateX(0); } }
-        .drift-left { animation: drift-left 45s linear infinite; }
-        .drift-right { animation: drift-right 60s linear infinite; }
-      `}</style>
-
       <div style={{ textAlign: "center", marginBottom: "48px", padding: "0 32px" }}>
         <p style={{ color: "rgba(255,255,255,0.15)", fontSize: "9px", letterSpacing: "0.3em", textTransform: "uppercase", marginBottom: "16px" }}>What awaits you</p>
         <h2 style={{ fontFamily: "var(--font-cormorant)", fontWeight: 300, color: "rgba(255,255,255,0.8)", fontSize: "clamp(36px,4vw,56px)", lineHeight: 1.1, margin: "0 auto", maxWidth: "600px" }}>
